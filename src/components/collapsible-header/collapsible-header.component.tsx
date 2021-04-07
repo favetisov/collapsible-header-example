@@ -27,15 +27,14 @@ export class CollapsibleHeaderComponent {
       writeTask(() => {
         el.style.setProperty('--padding-top', this.maxHeightPx + 'px');
       });
-      el.addEventListener('scroll', e => {
+      el.addEventListener('scroll', () => {
         readTask(() => {
-          const target = e['path'][0];
-          const scrollTop = target.scrollTop;
+          const scrollTop = el.scrollTop;
           const height = Math.min(Math.max(this.maxHeightPx - scrollTop, this.minHeightPx), this.maxHeightPx);
           if (height != this.currentHeight) {
             this.headerEl.style.setProperty('min-height', height + 'px');
             this.scrollElements
-              .filter(e => e != target)
+              .filter(e => e != el)
               .forEach(el => {
                 el.scroll(0, scrollTop);
               });
