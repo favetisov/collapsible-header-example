@@ -1,9 +1,5 @@
 main {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+
 }
 
 ion-header {
@@ -18,6 +14,10 @@ ion-slides {
   height: 100%;
 }
 
-ion-content {
-  --padding-top: 200px;
+main.wrapper-content {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }

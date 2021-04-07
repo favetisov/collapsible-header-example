@@ -1,0 +1,7 @@
+{
+  "name": "collapsible-header",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

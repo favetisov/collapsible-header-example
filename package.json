@@ -9,13 +9,26 @@
   ],
   "scripts": {
     "build": "stencil build",
+    "ionic:build": "echo 'skipping build'",
+    "ionic:serve": "stencil build --dev --watch --serve",
+    "dev": "stencil build --dev --watch --serve",
+    "android": "stencil build && ionic cap copy android && stencil build && ionic cap sync android && ionic cap open android",
+    "dev-android": "stencil build && ionic cap copy android && stencil build && ionic cap sync android && ionic cap run android -l --external",
+    "dev-ios": "stencil build && ionic cap copy ios && stencil build && ionic cap sync ios && ionic cap run ios -l --external",
+    "ios": "stencil build && ionic cap copy ios && stencil build && ionic cap sync ios && ionic cap open ios",
     "start": "stencil build --dev --watch --serve",
-    "test": "stencil test --spec --e2e",
-    "test.watch": "stencil test --spec --e2e --watch",
-    "generate": "stencil generate"
+    "update": "npm-check-updates -u && npm i",
+    "gen": "scripts/generate-component.js",
+    "postinstall": "scripts/postinstall.js",
+    "release": "scripts/release.js"
   },
   "devDependencies": {
+    "@capacitor/cli": "2.4.7",
     "@ionic/core": "^5.3.2",
     "@stencil/core": "^2.0.1"
+  },
+  "dependencies": {
+    "@capacitor/android": "^2.4.7",
+    "@capacitor/core": "2.4.7"
   }
 }
