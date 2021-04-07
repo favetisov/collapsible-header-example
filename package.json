@@ -19,7 +19,6 @@
     "start": "stencil build --dev --watch --serve",
     "update": "npm-check-updates -u && npm i",
     "gen": "scripts/generate-component.js",
-    "postinstall": "scripts/postinstall.js",
     "release": "scripts/release.js"
   },
   "devDependencies": {
