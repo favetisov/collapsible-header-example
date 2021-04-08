@@ -6,29 +6,25 @@ import { Component, h, Element } from '@stencil/core';
 })
 export class CollapsibleHeaderContentComponent {
   @Element() el: HTMLElement;
-  toolbarEl: HTMLIonTitleElement;
+  titleEl: HTMLIonTitleElement;
   headerEl: HTMLCollapsibleHeaderElement;
 
   componentDidLoad() {
-    const maxHeightPx = 200;
-    const minHeightPx = 56;
-    const MAX_FONT_SIZE = 22;
-    const MIN_FONT_SIZE = 14;
+    const MAX_HEIGHT_PX = 200;
+    const MIN_HEIGHT_PX = 56;
 
     this.headerEl = this.el.closest('collapsible-header');
-    const observer = new ResizeObserver(el => {
-      const height = el[0].contentRect.height;
-      const heightDiffPercent = (maxHeightPx - height) / (maxHeightPx - minHeightPx);
-      const fontSize = Math.min(MAX_FONT_SIZE, MAX_FONT_SIZE - heightDiffPercent * (MAX_FONT_SIZE - MIN_FONT_SIZE));
-      this.toolbarEl.style.setProperty('font-size', fontSize + 'px');
+    this.headerEl.addEventListener('heightChange', e => {
+      const height = e['detail'];
+      const heightDiffPercent = (MAX_HEIGHT_PX - height) / (MAX_HEIGHT_PX - MIN_HEIGHT_PX);
+      this.titleEl.style.setProperty('transform', `scale(${1 / (1 + heightDiffPercent)})`);
     });
-    observer.observe(this.headerEl);
   }
 
   render() {
     return (
       <ion-toolbar>
-        <ion-title ref={el => (this.toolbarEl = el)}>HEADER TITLE</ion-title>
+        <ion-title ref={el => (this.titleEl = el)}>HEADER TITLE</ion-title>
       </ion-toolbar>
     );
   }

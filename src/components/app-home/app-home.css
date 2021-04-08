@@ -10,6 +10,10 @@ ion-header ion-toolbar {
   color: white;
 }
 
+ion-header collapsible-header-content {
+  display: block;
+}
+
 ion-slides {
   height: 100%;
 }

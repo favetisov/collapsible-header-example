@@ -1,4 +1,4 @@
-import { Component, h, Host, Element, State, Prop } from '@stencil/core';
+import { Component, h, Host, Element, Prop, Event, EventEmitter } from '@stencil/core';
 import { readTask, writeTask } from '@stencil/core';
 
 @Component({
@@ -9,15 +9,14 @@ import { readTask, writeTask } from '@stencil/core';
 export class CollapsibleHeaderComponent {
   @Prop() maxHeightPx = 200;
   @Prop() minHeightPx = 56;
+  @Event() heightChange: EventEmitter;
 
-  @State() scrollElements: HTMLElement[] = [];
-
-  headerEl: HTMLElement;
   @Element() el: HTMLElement;
-  currentHeight: number;
+  currentScroll: number;
 
   async componentDidLoad() {
     const pageEl = this.el.closest('ion-app,ion-page,.ion-page,page-inner');
+    const headerEl = this.el.children[0] as HTMLIonHeaderElement;
     const contentNodes = pageEl ? pageEl.querySelectorAll('ion-content') : null;
     const scrollEls = [];
 
@@ -30,26 +29,27 @@ export class CollapsibleHeaderComponent {
       el.addEventListener('scroll', () => {
         readTask(() => {
           const scrollTop = el.scrollTop;
-          const height = Math.min(Math.max(this.maxHeightPx - scrollTop, this.minHeightPx), this.maxHeightPx);
-          if (height != this.currentHeight) {
-            this.headerEl.style.setProperty('min-height', height + 'px');
-            this.scrollElements
+          const headerScroll = Math.max(0, Math.min(this.maxHeightPx - this.minHeightPx, scrollTop));
+          if (headerScroll != this.currentScroll) {
+            headerEl.style.setProperty('transform', `translateY(-${headerScroll}px)`);
+            (headerEl.children[0] as HTMLElement)?.style.setProperty('transform', `translateY(${headerScroll}px)`);
+            scrollEls
               .filter(e => e != el)
               .forEach(el => {
                 el.scroll(0, scrollTop);
               });
-            this.currentHeight = height;
+            this.currentScroll = headerScroll;
+            this.heightChange.emit(this.maxHeightPx - headerScroll);
           }
         });
       });
     }
-    this.scrollElements = scrollEls;
   }
 
   render() {
     return (
       <Host>
-        <ion-header style={{ 'min-height': this.maxHeightPx + 'px' }} ref={el => (this.headerEl = el)}>
+        <ion-header style={{ height: this.maxHeightPx + 'px' }}>
           <slot />
         </ion-header>
       </Host>
